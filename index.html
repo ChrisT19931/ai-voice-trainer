@@ -361,7 +361,12 @@
 
         const escapeHtml = (unsafe) => {
             if (typeof unsafe !== 'string') return '';
-            return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """).replace(/'/g, "'");
+            return unsafe..replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#039;");
+
         };
 
         const initializeTheme = () => {
@@ -562,8 +567,6 @@ const startCall = async () => {
             try {
                 const wsUrl = await getSignedUrl();
                 // First ask ElevenLabs for your temporary WebSocket URL...
-const wsUrl = await getSignedUrl();
-
 // …then open your socket with that URL
 appState.websocket = new WebSocket(wsUrl);
 
