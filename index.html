@@ -14,7 +14,6 @@
     <!-- Libraries via CDN with fallback -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.1/dist/feather.min.js"></script>
 
-
     <style>
         :root {
             --color-background-base: #0A0A14; --color-background-elevated: #10101C; --color-surface-1: #141425; --color-surface-2: #1E1E33; --color-surface-3: #2A2A44; --color-surface-4: #383855; --color-border-subtle: #28283E; --color-border-default: #30304A; --color-border-strong: #4A4A6A; --color-text-primary: #F0F0F5; --color-text-secondary: #A0A0C0; --color-text-tertiary: #7A7A9A; --color-text-placeholder: #6A6A8A; --color-text-on-accent: #FFFFFF; --color-accent-primary: #6c47ff; --color-accent-primary-hover: #7d5eff; --color-accent-primary-active: #5b33ff; --color-accent-secondary: #00e0d3; --color-accent-tertiary: #00c6FF; --color-text-error: #F77272; --color-text-success: #57E092; --color-text-warning: #F5B85E; --color-text-info: var(--color-accent-tertiary); --color-white: #ffffff; --color-black: #000000;
@@ -173,7 +172,7 @@
                             <li>Check the debug console (F12 -> Console) for error messages.</li>
                             <li>Ensure your browser allows WebSocket connections and microphone access.</li>
                             <li>Verify a stable internet connection.</li>
-                            <li>If embedded in Wix, check for iframe-related restrictions.</li>
+                            <li>If embedded in an environment with restrictions, check for related issues.</li>
                         </ul>
                         <p class="text-sm mt-md" style="color: var(--color-text-warning);">
                             <strong>Note:</strong> The necessary API configurations for ElevenLabs are handled internally by this tool.
@@ -232,6 +231,7 @@
         const THEME_KEY_LS = 'aiSalesPro4_theme_hardcoded_v4_public_final';
         const HARDCODED_VOICE_ID = 'nGANIuCPLd6iMHN29kJp';
         const ELEVENLABS_API_KEY = 'sk_3813e5cdafb1f36254ab1f4677b63e35aa26c5ec080d2253';
+        const ELEVENLABS_WEBSOCKET_URL = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${HARDCODED_VOICE_ID}`;
         const ELEVENLABS_MODEL_ID = 'eleven_turbo_v2';
         const CONNECTION_TIMEOUT = 15000;
 
@@ -362,7 +362,7 @@
 
         const escapeHtml = (unsafe) => {
             if (typeof unsafe !== 'string') return '';
-            return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """).replace(/'/g, "'");
         };
 
         const initializeTheme = () => {
@@ -384,7 +384,7 @@
                 updateStatus('Speech recognition not supported. Try Chrome.', 'error');
                 showToast('Speech recognition not supported. Try Chrome.', 'error', 5000);
                 logDebug('Speech Recognition API not supported by this browser.', 'error');
-                if (elements.recordBtn) elements.recordBtn.disabled = false;
+                if (elements.recordBtn) elements.recordBtn.disabled = true;
                 return false;
             }
 
@@ -514,18 +514,29 @@
             elements.connectionTimer.textContent = '';
         };
 
-
+        // Fetches the signed, time-limited WebSocket URL
         async function getSignedUrl() {
-  const resp = await fetch(
-    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
-    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
-  );
-  const { signed_url } = await resp.json();
-  return signed_url;
-}
+            try {
+                const resp = await fetch(
+                    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
+                    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
+                );
+                if (!resp.ok) {
+                    throw new Error(`HTTP error! Status: ${resp.status}`);
+                }
+                const data = await resp.json();
+                if (!data.signed_url) {
+                    throw new Error('Signed URL not provided in response');
+                }
+                return data.signed_url;
+            } catch (error) {
+                logDebug(`Failed to fetch signed URL: ${error.message}`, 'error');
+                throw error;
+            }
+        }
 
-const startCall = async () => {
-    logDebug("startCall function invoked", 'info');
+        const startCall = async () => {
+            logDebug("startCall function invoked", 'info');
             if (!appState.elevenLabsApiKey) {
                 showToast('API key is missing.', 'error');
                 return;
@@ -539,9 +550,8 @@ const startCall = async () => {
             if (elements.transcriptArea) elements.transcriptArea.innerHTML = '';
             addMessageToTranscript('System', 'Attempting to connect to AI agent...', 'system');
             try {
-                const url = await getSignedUrl();
-appState.websocket = new WebSocket(url);
-
+                const wsUrl = await getSignedUrl();
+                appState.websocket = new WebSocket(wsUrl);
                 appState.audioQueue = [];
                 startConnectionTimer();
                 appState.websocket.onopen = () => {
@@ -549,18 +559,11 @@ appState.websocket = new WebSocket(url);
                     toggleLoading(false);
                     clearConnectionTimer();
                     appState.isSessionActive = true;
-                    const initMsg = {
-                        xi_api_key: appState.elevenLabsApiKey,
-                        voice_id: appState.elevenLabsVoiceId,
-                        model_id: ELEVENLABS_MODEL_ID,
-                        try_trigger_generation: true,
-                        enable_logging: true
-                    };
                     updateStatus('Connected! AI Agent is initiating...', 'success');
                     addMessageToTranscript('System', 'Connection successful. Waiting for AI...', 'system');
                     if (elements.startCallBtn) elements.startCallBtn.disabled = true;
                     if (elements.endCallBtn) elements.endCallBtn.disabled = false;
-                    if (elements.recordBtn) elements.recordBtn.disabled = false;
+                    if (elements.recordBtn) elements.recordBtn.disabled = false; // Unlock mic immediately
                 };
                 appState.websocket.onmessage = (event) => {
                     let response;
@@ -575,7 +578,7 @@ appState.websocket = new WebSocket(url);
                         if (!appState.isAISpeaking && appState.audioQueue.length > 0) {
                             appState.isAISpeaking = true;
                             updateStatus('AI is speaking...', 'info');
-                            if (elements.recordBtn) elements.recordBtn.disabled = false;
+                            if (elements.recordBtn) elements.recordBtn.disabled = true;
                             playAudioFromQueue();
                         }
                     }
@@ -676,7 +679,7 @@ appState.websocket = new WebSocket(url);
             if (elements.startCallBtn) elements.startCallBtn.disabled = false;
             if (elements.endCallBtn) elements.endCallBtn.disabled = true;
             if (elements.recordBtn) {
-                elements.recordBtn.disabled = false;
+                elements.recordBtn.disabled = true;
                 elements.recordBtn.classList.remove('recording');
                 elements.recordBtn.innerHTML = '<i data-feather="mic"></i>';
                 _replaceFeatherIcons([elements.recordBtn.querySelector('i')]);
@@ -734,7 +737,7 @@ appState.websocket = new WebSocket(url);
             if (elements.themeToggleBtn) elements.themeToggleBtn.addEventListener('click', toggleTheme);
             if (elements.startCallBtn) elements.startCallBtn.addEventListener('click', startCall);
             if (elements.recordBtn && speechRecognitionInitialized) elements.recordBtn.addEventListener('click', toggleRecording);
-            else if (elements.recordBtn) elements.recordBtn.disabled = false;
+            else if (elements.recordBtn) elements.recordBtn.disabled = true;
             if (elements.endCallBtn) elements.endCallBtn.addEventListener('click', () => endCall(true));
 
             if (elements.toggleDebugBtn) elements.toggleDebugBtn.addEventListener('click', (e) => {
@@ -759,7 +762,7 @@ appState.websocket = new WebSocket(url);
 
             updateStatus('Trainer Ready. Click "Start Call" to begin.', 'info');
             if (elements.startCallBtn) elements.startCallBtn.disabled = false;
-            if (elements.recordBtn) elements.recordBtn.disabled = false;
+            if (elements.recordBtn) elements.recordBtn.disabled = true;
             if (elements.endCallBtn) elements.endCallBtn.disabled = true;
 
             addMessageToTranscript('System', 'Welcome! Click "Start Call" to begin your AI training session.', 'system');
