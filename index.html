@@ -439,8 +439,19 @@
                 throw error;
             }
         }
+// ——— fetches your temporary ConvAI WebSocket URL ———
+async function getSignedUrl() {
+  const resp = await fetch(
+    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
+    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
+  );
+  if (!resp.ok) throw new Error(`Signed-URL error ${resp.status}`);
+  const { signed_url } = await resp.json();
+  return signed_url;
+}
 
-        const startCall = async () => {
+const startCall = async () => {
+
             if (!appState.elevenLabsApiKey) {
                 showToast('Unable to start the call due to a configuration issue.', 'error');
                 return;
@@ -454,12 +465,23 @@
             if (elements.transcriptArea) elements.transcriptArea.innerHTML = '';
             addMessageToTranscript('System', 'Connecting to AI agent...', 'system');
             try {
-                const wsUrl = await getSignedUrl();
-                appState.websocket = new WebSocket(wsUrl);
+                const wsUrl = await getSignedUrl();          // ← ask ElevenLabs for your WS URL
+appState.websocket = new WebSocket(wsUrl);    // ← then open it
+
                 appState.audioQueue = [];
                 appState.websocket.onopen = () => {
                     toggleLoading(false);
                     appState.isSessionActive = true;
+                    // — send the “start talking” command to ElevenLabs —
+const initMsg = {
+  xi_api_key:            appState.elevenLabsApiKey,
+  voice_id:              appState.elevenLabsVoiceId,
+  model_id:              ELEVENLABS_MODEL_ID,
+  try_trigger_generation: true,
+  enable_logging:        true
+};
+appState.websocket.send(JSON.stringify(initMsg));
+
                     updateStatus('Connected! AI Agent is starting...', 'success');
                     addMessageToTranscript('System', 'Connected successfully. Waiting for AI to speak...', 'system');
                     if (elements.startCallBtn) elements.startCallBtn.disabled = true;
@@ -480,7 +502,7 @@
                         if (!appState.isAISpeaking && appState.audioQueue.length > 0) {
                             appState.isAISpeaking = true;
                             updateStatus('AI is speaking...', 'info');
-                            if (elements.recordBtn) elements.recordBtn.disabled = true;
+                            if (elements.recordBtn) elements.recordBtn.disabled = false;
                             playAudioFromQueue();
                         }
                     }
@@ -655,6 +677,18 @@
             document.addEventListener('DOMContentLoaded', initializeTrainer);
         } else {
             initializeTrainer();
+            elements.howToToggleBtn.addEventListener('click', () => {
+  // toggle aria-expanded
+  const expanded = elements.howToToggleBtn.getAttribute('aria-expanded') === 'true';
+  elements.howToToggleBtn.setAttribute('aria-expanded', String(!expanded));
+  // show/hide the content
+  elements.howToContent.classList.toggle('d-none', expanded);
+  // swap icon
+  const icon = elements.howToToggleBtn.querySelector('i');
+  icon.setAttribute('data-feather', expanded ? 'help-circle' : 'chevron-down');
+  feather.replace({ class: [icon] });
+});
+
         }
     </script>
 </body>
