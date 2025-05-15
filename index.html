@@ -384,7 +384,7 @@
                 updateStatus('Speech recognition not supported. Try Chrome.', 'error');
                 showToast('Speech recognition not supported. Try Chrome.', 'error', 5000);
                 logDebug('Speech Recognition API not supported by this browser.', 'error');
-                if (elements.recordBtn) elements.recordBtn.disabled = true;
+                if (elements.recordBtn) elements.recordBtn.disabled = false;
                 return false;
             }
 
@@ -556,12 +556,11 @@ appState.websocket = new WebSocket(url);
                         try_trigger_generation: true,
                         enable_logging: true
                     };
-                    appState.websocket.send(JSON.stringify(initMsg));
                     updateStatus('Connected! AI Agent is initiating...', 'success');
                     addMessageToTranscript('System', 'Connection successful. Waiting for AI...', 'system');
                     if (elements.startCallBtn) elements.startCallBtn.disabled = true;
                     if (elements.endCallBtn) elements.endCallBtn.disabled = false;
-                    if (elements.recordBtn) elements.recordBtn.disabled = true;
+                    if (elements.recordBtn) elements.recordBtn.disabled = false;
                 };
                 appState.websocket.onmessage = (event) => {
                     let response;
@@ -576,7 +575,7 @@ appState.websocket = new WebSocket(url);
                         if (!appState.isAISpeaking && appState.audioQueue.length > 0) {
                             appState.isAISpeaking = true;
                             updateStatus('AI is speaking...', 'info');
-                            if (elements.recordBtn) elements.recordBtn.disabled = true;
+                            if (elements.recordBtn) elements.recordBtn.disabled = false;
                             playAudioFromQueue();
                         }
                     }
@@ -677,7 +676,7 @@ appState.websocket = new WebSocket(url);
             if (elements.startCallBtn) elements.startCallBtn.disabled = false;
             if (elements.endCallBtn) elements.endCallBtn.disabled = true;
             if (elements.recordBtn) {
-                elements.recordBtn.disabled = true;
+                elements.recordBtn.disabled = false;
                 elements.recordBtn.classList.remove('recording');
                 elements.recordBtn.innerHTML = '<i data-feather="mic"></i>';
                 _replaceFeatherIcons([elements.recordBtn.querySelector('i')]);
@@ -735,7 +734,7 @@ appState.websocket = new WebSocket(url);
             if (elements.themeToggleBtn) elements.themeToggleBtn.addEventListener('click', toggleTheme);
             if (elements.startCallBtn) elements.startCallBtn.addEventListener('click', startCall);
             if (elements.recordBtn && speechRecognitionInitialized) elements.recordBtn.addEventListener('click', toggleRecording);
-            else if (elements.recordBtn) elements.recordBtn.disabled = true;
+            else if (elements.recordBtn) elements.recordBtn.disabled = false;
             if (elements.endCallBtn) elements.endCallBtn.addEventListener('click', () => endCall(true));
 
             if (elements.toggleDebugBtn) elements.toggleDebugBtn.addEventListener('click', (e) => {
@@ -760,7 +759,7 @@ appState.websocket = new WebSocket(url);
 
             updateStatus('Trainer Ready. Click "Start Call" to begin.', 'info');
             if (elements.startCallBtn) elements.startCallBtn.disabled = false;
-            if (elements.recordBtn) elements.recordBtn.disabled = true;
+            if (elements.recordBtn) elements.recordBtn.disabled = false;
             if (elements.endCallBtn) elements.endCallBtn.disabled = true;
 
             addMessageToTranscript('System', 'Welcome! Click "Start Call" to begin your AI training session.', 'system');
