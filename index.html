@@ -12,13 +12,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📞</text></svg>">
 
     <!-- Libraries via CDN with fallback -->
-    <script src="https://cdn.jsdelivr.co/npm/feather-icons@4.29.1/dist/feather.min.js"></script>
-    <script>
-        // Fallback for Feather Icons if CDN fails
-        if (typeof feather === 'undefined') {
-            document.write('<script src="path/to/local/feather.min.js"><\/script>');
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.1/dist/feather.min.js"></script>
+
 
     <style>
         :root {
@@ -237,7 +232,6 @@
         const THEME_KEY_LS = 'aiSalesPro4_theme_hardcoded_v4_public_final';
         const HARDCODED_VOICE_ID = 'nGANIuCPLd6iMHN29kJp';
         const ELEVENLABS_API_KEY = 'sk_3813e5cdafb1f36254ab1f4677b63e35aa26c5ec080d2253';
-        const ELEVENLABS_WEBSOCKET_URL = 'wss://api.elevenlabs.io/v1/voice-chat';
         const ELEVENLABS_MODEL_ID = 'eleven_turbo_v2';
         const CONNECTION_TIMEOUT = 15000;
 
@@ -520,8 +514,18 @@
             elements.connectionTimer.textContent = '';
         };
 
-        const startCall = () => {
-            logDebug("startCall function invoked", 'info');
+
+        async function getSignedUrl() {
+  const resp = await fetch(
+    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
+    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
+  );
+  const { signed_url } = await resp.json();
+  return signed_url;
+}
+
+const startCall = async () => {
+    logDebug("startCall function invoked", 'info');
             if (!appState.elevenLabsApiKey) {
                 showToast('API key is missing.', 'error');
                 return;
@@ -535,7 +539,9 @@
             if (elements.transcriptArea) elements.transcriptArea.innerHTML = '';
             addMessageToTranscript('System', 'Attempting to connect to AI agent...', 'system');
             try {
-                appState.websocket = new WebSocket(ELEVENLABS_WEBSOCKET_URL);
+                const url = await getSignedUrl();
+appState.websocket = new WebSocket(url);
+
                 appState.audioQueue = [];
                 startConnectionTimer();
                 appState.websocket.onopen = () => {
