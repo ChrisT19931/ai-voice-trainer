@@ -11,7 +11,7 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📞</text></svg>">
 
-    <!-- Libraries via CDN with fallback -->
+    <!-- Libraries via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.1/dist/feather.min.js"></script>
 
     <style>
@@ -41,8 +41,6 @@
         p { margin-bottom: var(--spacing-md); color: var(--color-text-secondary); max-width: 75ch; } p:last-child { margin-bottom: 0; }
         a { color: var(--color-text-link); text-decoration: none; } a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
         ul, ol { list-style-position: inside; padding-left: var(--spacing-sm); margin-bottom: var(--spacing-md); }
-        code { font-family: monospace; background-color: var(--color-surface-2); padding: var(--spacing-xxs) var(--spacing-xs); border-radius: var(--border-radius-sm); color: var(--color-text-secondary); }
-        pre { padding: var(--spacing-md); overflow-x: auto; white-space: pre-wrap; border: 1px solid var(--color-border-subtle); background-color: var(--color-background-elevated); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md); }
         .ai-sales-pro-container { max-width: var(--container-max-width); margin: 0 auto; padding: var(--spacing-lg) var(--spacing-md); display: flex; flex-direction: column; min-height: 90vh; }
         .suite-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--spacing-md); padding-bottom: var(--spacing-lg); margin-bottom: var(--spacing-lg); border-bottom: 1px solid var(--color-border-default); }
         .suite-title { font-size: 1.75rem; font-weight: 700; background: var(--gradient-logo); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; margin: 0; display: inline-flex; align-items: center; gap: var(--spacing-sm); }
@@ -108,14 +106,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) { html { font-size: 15px; } .ai-sales-pro-container { padding: var(--spacing-md); } .voice-trainer-panel { padding: var(--spacing-lg); } .controls-section .d-flex { flex-direction: column; align-items: center; } }
         @media (max-width: 480px) { html { font-size: 14px; } .suite-header { flex-direction: column; align-items: flex-start; } .voice-trainer-panel { padding: var(--spacing-md); } #transcript-area { height: 200px; } }
-        .api-key-warning { background-color: rgba(245, 184, 94, 0.15); border: 1px solid var(--color-text-warning); color: var(--color-text-warning); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-top: var(--spacing-md); text-align: center; }
-        #debug-console { background-color: var(--color-surface-1); border: 1px solid var(--color-border-default); border-radius: var(--border-radius-md); padding: var(--spacing-md); height: 120px; overflow-y: auto; margin-top: var(--spacing-md); font-family: monospace; font-size: 0.8rem; color: var(--color-text-secondary); display: none; }
-        .debug-entry { margin-bottom: 4px; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 2px; }
-        .debug-entry.error { color: var(--color-text-error); }
-        .debug-entry.warning { color: var(--color-text-warning); }
-        .debug-entry.success { color: var(--color-text-success); }
-        .show-debug-toggle { font-size: 0.8rem; color: var(--color-text-tertiary); text-decoration: underline; cursor: pointer; margin-top: var(--spacing-sm); display: inline-block; }
-        .connection-timer { font-size: 0.8rem; color: var(--color-text-tertiary); margin-top: var(--spacing-xs); text-align: center; }
     </style>
 </head>
 <body>
@@ -154,28 +144,17 @@
                         <i data-feather="help-circle"></i> How to Use
                     </button>
                     <div class="how-to-content d-none" id="how-to-voice-trainer">
-                        <h4>Using the AI Trainer:</h4>
+                        <h4>Get Started with Your AI Trainer</h4>
                         <ol>
-                            <li><strong>Start Call:</strong> Click the "Start Call" button. This will connect to the AI agent.
-                                <br><em>The AI should begin speaking its opening line automatically.</em>
-                            </li>
-                            <li><strong>Microphone Permission:</strong> Your browser will ask for permission to use your microphone if it hasn't already been granted for this site. Please allow it.</li>
-                            <li><strong>Speak Your Response:</strong> After the AI finishes speaking, the <i data-feather="mic" style="width:1em; height:1em; vertical-align:text-bottom;"></i> Microphone button will become active. Click it (it turns red). Speak your response.</li>
-                            <li><strong>Stop Recording:</strong> Click the Microphone button again (it shows a <i data-feather="square" style="width:1em; height:1em; vertical-align:text-bottom;"></i> icon). Your speech is sent to the AI.</li>
-                            <li><strong>Listen & Repeat:</strong> The AI agent will respond. The conversation appears in the transcript area.</li>
-                            <li><strong>End Call:</strong> Click "End Call" when finished.</li>
+                            <li><strong>Start the Call:</strong> Click "Start Call" to connect with the AI agent. The AI will greet you automatically.</li>
+                            <li><strong>Allow Microphone Access:</strong> Your browser may ask for microphone permission. Please allow it to proceed.</li>
+                            <li><strong>Speak Your Response:</strong> Once the AI finishes speaking, click the <i data-feather="mic" style="width:1em; height:1em; vertical-align:text-bottom;"></i> Microphone button (it will turn red). Say your response clearly.</li>
+                            <li><strong>Stop Recording:</strong> Click the Microphone button again (it will show a <i data-feather="square" style="width:1em; height:1em; vertical-align:text-bottom;"></i> icon) to stop recording.</li>
+                            <li><strong>Listen to the AI:</strong> The AI will respond, and the conversation will appear in the transcript below.</li>
+                            <li><strong>End the Call:</strong> Click "End Call" when you're done.</li>
                         </ol>
                         <p class="text-sm text-tertiary mt-md">
-                            <strong>Troubleshooting:</strong> If issues occur:
-                        </p>
-                        <ul>
-                            <li>Check the debug console (F12 -> Console) for error messages.</li>
-                            <li>Ensure your browser allows WebSocket connections and microphone access.</li>
-                            <li>Verify a stable internet connection.</li>
-                            <li>If embedded in an environment with restrictions, check for related issues.</li>
-                        </ul>
-                        <p class="text-sm mt-md" style="color: var(--color-text-warning);">
-                            <strong>Note:</strong> The necessary API configurations for ElevenLabs are handled internally by this tool.
+                            <strong>Tips:</strong> Ensure you're in a quiet environment for the best experience. If the AI doesn't respond, check your internet connection or microphone settings.
                         </p>
                     </div>
                 </div>
@@ -196,17 +175,12 @@
 
                 <section class="status-section">
                     <div id="status-bar" class="status-bar">Trainer Idle. Click "Start Call" to begin.</div>
-                    <div class="connection-timer" id="connection-timer"></div>
                 </section>
 
                 <section class="transcript-section flex-col flex-grow">
                     <h4 class="mb-sm">Conversation Transcript</h4>
                     <div id="transcript-area" class="flex-grow">
                         <!-- Messages will appear here -->
-                    </div>
-                    <a href="#" class="show-debug-toggle" id="toggle-debug">Show/Hide Debug Console</a>
-                    <div id="debug-console">
-                        <!-- Debug messages will appear here -->
                     </div>
                 </section>
 
@@ -231,8 +205,6 @@
         const THEME_KEY_LS = 'aiSalesPro4_theme_hardcoded_v4_public_final';
         const HARDCODED_VOICE_ID = 'nGANIuCPLd6iMHN29kJp';
         const ELEVENLABS_API_KEY = 'sk_3813e5cdafb1f36254ab1f4677b63e35aa26c5ec080d2253';
-        const ELEVENLABS_MODEL_ID = 'eleven_turbo_v2';
-        const CONNECTION_TIMEOUT = 15000;
 
         let appState = {
             currentTheme: 'dark',
@@ -247,10 +219,6 @@
             audioPlayer: null,
             speechRecognizer: null,
             finalTranscript: '',
-            showDebug: false,
-            connectionTimer: null,
-            connectionStartTime: 0,
-            connectionTimeout: null,
         };
 
         const $ = (selector) => document.querySelector(selector);
@@ -269,9 +237,6 @@
             aiAudioPlayer: $('#ai-audio-player'),
             howToToggleBtn: $('.toggle-how-to-btn'), 
             howToContent: $('#how-to-voice-trainer'),
-            debugConsole: $('#debug-console'),
-            toggleDebugBtn: $('#toggle-debug'),
-            connectionTimer: $('#connection-timer')
         };
 
         function _replaceFeatherIcons(specificElements) {
@@ -283,33 +248,12 @@
                         feather.replace();
                     }
                 } catch (e) {
-                    logDebug(`Feather icon replacement error: ${e.message}`, 'error');
+                    console.error(`Feather icon replacement error: ${e.message}`);
                 }
             } else {
-                logDebug('Feather library not available for icon replacement.', 'warning');
+                console.warn('Feather library not available for icon replacement.');
             }
         }
-
-        const logDebug = (message, type = 'info') => {
-            if (appState.showDebug || type === 'error' || type === 'warning') {
-                console.log(`[${type.toUpperCase()}] ${message}`);
-            }
-            if (!elements.debugConsole || !appState.showDebug) return;
-            const entry = document.createElement('div');
-            entry.classList.add('debug-entry');
-            if (type !== 'info') entry.classList.add(type);
-            const timestamp = new Date().toLocaleTimeString();
-            entry.textContent = `[${timestamp}] ${message}`;
-            elements.debugConsole.appendChild(entry);
-            elements.debugConsole.scrollTop = elements.debugConsole.scrollHeight;
-        };
-
-        const toggleDebugConsole = () => {
-            if (!elements.debugConsole) return;
-            appState.showDebug = !appState.showDebug;
-            elements.debugConsole.style.display = appState.showDebug ? 'block' : 'none';
-            logDebug(`Debug console ${appState.showDebug ? 'shown' : 'hidden'}.`, 'info');
-        };
 
         const toggleLoading = (show, message = 'Processing...') => {
             if (!elements.loadingOverlay || !elements.loadingOverlayText) return;
@@ -361,12 +305,7 @@
 
         const escapeHtml = (unsafe) => {
             if (typeof unsafe !== 'string') return '';
-            return unsafe..replace(/&/g, "&amp;")
-.replace(/</g, "&lt;")
-.replace(/>/g, "&gt;")
-.replace(/"/g, "&quot;")
-.replace(/'/g, "&#039;");
-
+            return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, """).replace(/'/g, "'");
         };
 
         const initializeTheme = () => {
@@ -385,9 +324,8 @@
         const initializeSpeechRecognition = () => {
             window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!window.SpeechRecognition) {
-                updateStatus('Speech recognition not supported. Try Chrome.', 'error');
-                showToast('Speech recognition not supported. Try Chrome.', 'error', 5000);
-                logDebug('Speech Recognition API not supported by this browser.', 'error');
+                updateStatus('Speech recognition is not supported in this browser. Please use a modern browser like Chrome.', 'error');
+                showToast('Speech recognition is not supported. Please use Chrome.', 'error', 5000);
                 if (elements.recordBtn) elements.recordBtn.disabled = true;
                 return false;
             }
@@ -410,7 +348,6 @@
             };
 
             appState.speechRecognizer.onend = () => {
-                logDebug("Speech recognition ended.", 'info');
                 appState.isListening = false;
                 if (elements.recordBtn) {
                     elements.recordBtn.classList.remove('recording');
@@ -422,7 +359,7 @@
                     addMessageToTranscript('You', appState.finalTranscript.trim());
                     sendUserUtteranceToElevenLabs(appState.finalTranscript.trim());
                 } else if (!appState.finalTranscript.trim() && appState.isSessionActive) {
-                    updateStatus('No speech detected. Click microphone to try again.', 'warning');
+                    updateStatus('No speech detected. Click the microphone to try again.', 'warning');
                 }
 
                 if (appState.isSessionActive && !appState.isAISpeaking) {
@@ -431,7 +368,6 @@
             };
 
             appState.speechRecognizer.onerror = (event) => {
-                logDebug(`Speech Recognition Error: ${event.error}`, 'error');
                 appState.isListening = false;
                 if (elements.recordBtn) {
                     elements.recordBtn.classList.remove('recording');
@@ -439,30 +375,26 @@
                     _replaceFeatherIcons([elements.recordBtn.querySelector('i')]);
                     elements.recordBtn.disabled = (appState.isSessionActive && !appState.isAISpeaking) ? false : true;
                 }
-                let errorMsg = 'Speech recognition error';
-                if (event.error === 'no-speech') errorMsg = 'No speech was detected.';
-                else if (event.error === 'audio-capture') errorMsg = 'Microphone problem. Check permissions.';
-                else if (event.error === 'not-allowed') errorMsg = 'Microphone access denied by user/browser.';
-                else errorMsg = `Error: ${event.error}`;
+                let errorMsg = 'There was an issue with speech recognition.';
+                if (event.error === 'no-speech') errorMsg = 'No speech was detected. Please try again.';
+                else if (event.error === 'audio-capture') errorMsg = 'Could not access the microphone. Please check your settings.';
+                else if (event.error === 'not-allowed') errorMsg = 'Microphone access was denied. Please allow access in your browser settings.';
+                else errorMsg = 'An error occurred while recording your speech.';
                 updateStatus(errorMsg, 'error');
                 showToast(errorMsg, 'error');
             };
 
-            logDebug('Speech Recognition initialized successfully.', 'success');
             return true;
         };
 
         const toggleRecording = () => {
             if (!appState.isSessionActive || !appState.speechRecognizer || appState.isAISpeaking) {
-                logDebug("Recording toggle failed: Session inactive, no recognizer, or AI speaking.", 'warning');
                 return;
             }
 
             if (appState.isListening) {
-                logDebug("Stopping speech recognition.", 'info');
                 appState.speechRecognizer.stop();
             } else {
-                logDebug("Attempting to start speech recognition.", 'info');
                 navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(() => {
                         appState.finalTranscript = '';
@@ -476,12 +408,11 @@
                         updateStatus('Listening... Speak now.', 'info');
                     })
                     .catch(err => {
-                        logDebug(`Microphone access error: ${err.name} - ${err.message || err}`, 'error');
-                        let userMessage = 'Microphone access error.';
+                        let userMessage = 'Could not access the microphone.';
                         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-                            userMessage = 'Microphone access denied. Please enable it in browser settings.';
+                            userMessage = 'Microphone access was denied. Please allow access in your browser settings.';
                         } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-                            userMessage = 'No microphone found. Please connect a microphone.';
+                            userMessage = 'No microphone found. Please connect a microphone and try again.';
                         }
                         updateStatus(userMessage, 'error');
                         showToast(userMessage, 'error', 5000);
@@ -490,35 +421,6 @@
             }
         };
 
-        const startConnectionTimer = () => {
-            appState.connectionStartTime = Date.now();
-            appState.connectionTimer = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - appState.connectionStartTime) / 1000);
-                elements.connectionTimer.textContent = `Connection time: ${elapsed}s`;
-            }, 1000);
-            appState.connectionTimeout = setTimeout(() => {
-                if (!appState.isSessionActive) {
-                    logDebug('Connection timed out.', 'error');
-                    updateStatus('Connection timed out. Please try again.', 'error');
-                    showToast('Connection timed out. Please try again.', 'error');
-                    endCall(false);
-                }
-            }, CONNECTION_TIMEOUT);
-        };
-
-        const clearConnectionTimer = () => {
-            if (appState.connectionTimer) {
-                clearInterval(appState.connectionTimer);
-                appState.connectionTimer = null;
-            }
-            if (appState.connectionTimeout) {
-                clearTimeout(appState.connectionTimeout);
-                appState.connectionTimeout = null;
-            }
-            elements.connectionTimer.textContent = '';
-        };
-
-        // Fetches the signed, time-limited WebSocket URL
         async function getSignedUrl() {
             try {
                 const resp = await fetch(
@@ -534,61 +436,43 @@
                 }
                 return data.signed_url;
             } catch (error) {
-                logDebug(`Failed to fetch signed URL: ${error.message}`, 'error');
                 throw error;
             }
         }
-        <script>
-async function getSignedUrl() {
-  const resp = await fetch(
-    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
-    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
-  );
-  const { signed_url } = await resp.json();
-  return signed_url;
-}
-</script>
 
-const startCall = async () => {
-
-            logDebug("startCall function invoked", 'info');
+        const startCall = async () => {
             if (!appState.elevenLabsApiKey) {
-                showToast('API key is missing.', 'error');
+                showToast('Unable to start the call due to a configuration issue.', 'error');
                 return;
             }
             if (appState.isSessionActive) {
-                showToast('Call is already active.', 'warning');
+                showToast('A call is already active.', 'warning');
                 return;
             }
             toggleLoading(true, 'Starting call...');
             updateStatus('Connecting to AI Agent...', 'info');
             if (elements.transcriptArea) elements.transcriptArea.innerHTML = '';
-            addMessageToTranscript('System', 'Attempting to connect to AI agent...', 'system');
+            addMessageToTranscript('System', 'Connecting to AI agent...', 'system');
             try {
                 const wsUrl = await getSignedUrl();
-                // First ask ElevenLabs for your temporary WebSocket URL...
-// …then open your socket with that URL
-appState.websocket = new WebSocket(wsUrl);
-
+                appState.websocket = new WebSocket(wsUrl);
                 appState.audioQueue = [];
-                startConnectionTimer();
                 appState.websocket.onopen = () => {
-                    logDebug("WebSocket connection opened.", 'success');
                     toggleLoading(false);
-                    clearConnectionTimer();
                     appState.isSessionActive = true;
-                    updateStatus('Connected! AI Agent is initiating...', 'success');
-                    addMessageToTranscript('System', 'Connection successful. Waiting for AI...', 'system');
+                    updateStatus('Connected! AI Agent is starting...', 'success');
+                    addMessageToTranscript('System', 'Connected successfully. Waiting for AI to speak...', 'system');
                     if (elements.startCallBtn) elements.startCallBtn.disabled = true;
                     if (elements.endCallBtn) elements.endCallBtn.disabled = false;
-                    if (elements.recordBtn) elements.recordBtn.disabled = false; // Unlock mic immediately
+                    if (elements.recordBtn) elements.recordBtn.disabled = false;
                 };
                 appState.websocket.onmessage = (event) => {
                     let response;
                     try {
                         response = JSON.parse(event.data);
                     } catch (e) {
-                        logDebug(`Error parsing WS message: ${e.message}`, 'error');
+                        updateStatus('An error occurred. Please try again.', 'error');
+                        showToast('An error occurred during the call.', 'error');
                         return;
                     }
                     if (response.audio) {
@@ -604,30 +488,27 @@ appState.websocket = new WebSocket(wsUrl);
                         addMessageToTranscript('AI', response.generated_text.trim());
                     }
                     if (response.error) {
-                        logDebug(`ElevenLabs WS Error: ${JSON.stringify(response.error)}`, 'error');
-                        let errDetail = response.error.message || JSON.stringify(response.error);
-                        showToast(`AI Error: ${errDetail}`, 'error', 7000);
-                        updateStatus(`AI Error: ${errDetail}`, 'error');
+                        let errDetail = response.error.message || 'Unknown error';
+                        updateStatus('An error occurred during the call.', 'error');
+                        showToast(`Call Error: ${errDetail}`, 'error', 7000);
                         if (["forbidden_voice_id", "invalid_api_key", "setup_required_for_voice_chat", "voice_not_found"].includes(response.error.status)) {
-                            addMessageToTranscript('System', `Critical AI Error: ${errDetail}. Ending call.`, 'system');
+                            addMessageToTranscript('System', 'The call encountered a critical error and has ended.', 'system');
                             endCall(false);
                         }
                     }
                 };
                 appState.websocket.onerror = (error) => {
-                    logDebug(`WebSocket Error: ${error.message || JSON.stringify(error)}`, 'error');
                     toggleLoading(false);
-                    updateStatus('Failed to connect to AI agent.', 'error');
-                    showToast('Failed to connect to AI agent.', 'error');
+                    updateStatus('Failed to connect to the AI agent.', 'error');
+                    showToast('Could not connect to the AI agent. Please try again.', 'error');
                     addMessageToTranscript('System', 'Connection failed.', 'system');
                     endCall(false);
                 };
                 appState.websocket.onclose = (event) => {
-                    logDebug(`WebSocket Closed: Code=${event.code}, Reason=${event.reason}`, 'info');
                     if (appState.isSessionActive) {
-                        updateStatus('Connection closed unexpectedly.', 'error');
-                        showToast('Connection closed unexpectedly.', 'error');
-                        addMessageToTranscript('System', 'Connection closed unexpectedly.', 'system');
+                        updateStatus('The call ended unexpectedly.', 'error');
+                        showToast('The call ended unexpectedly.', 'error');
+                        addMessageToTranscript('System', 'The call ended unexpectedly.', 'system');
                     }
                     appState.isSessionActive = false;
                     appState.isAISpeaking = false;
@@ -636,20 +517,17 @@ appState.websocket = new WebSocket(wsUrl);
                         elements.aiAudioPlayer.pause();
                         elements.aiAudioPlayer.src = "";
                     }
-                    clearConnectionTimer();
                 };
             } catch (err) {
-                logDebug(`WebSocket Setup Error: ${err.message}`, 'error');
                 toggleLoading(false);
-                updateStatus('Failed to initialize connection.', 'error');
-                showToast('Failed to initialize connection.', 'error');
-                addMessageToTranscript('System', 'Failed to initialize connection.', 'system');
+                updateStatus('Failed to start the call.', 'error');
+                showToast('Could not start the call. Please try again.', 'error');
+                addMessageToTranscript('System', 'Failed to start the call.', 'system');
             }
         };
 
         const sendUserUtteranceToElevenLabs = (text) => {
             if (!appState.websocket || appState.websocket.readyState !== WebSocket.OPEN) {
-                logDebug('WebSocket not open. Cannot send utterance.', 'error');
                 updateStatus('Connection lost. Please restart the call.', 'error');
                 showToast('Connection lost. Please restart the call.', 'error');
                 endCall(false);
@@ -660,13 +538,10 @@ appState.websocket = new WebSocket(wsUrl);
                 try_trigger_generation: true
             };
             appState.websocket.send(JSON.stringify(message));
-            logDebug(`Sent utterance to ElevenLabs: ${text}`, 'info');
             updateStatus('Waiting for AI response...', 'info');
         };
 
         const endCall = (sendCloseMessage = true) => {
-            logDebug(`endCall (sendCloseMessage: ${sendCloseMessage})`, 'info');
-            clearConnectionTimer();
             if (appState.speechRecognizer && appState.isListening) {
                 appState.speechRecognizer.abort();
                 appState.isListening = false;
@@ -677,9 +552,7 @@ appState.websocket = new WebSocket(wsUrl);
                 if (sendCloseMessage && appState.websocket.readyState === WebSocket.OPEN) {
                     try {
                         appState.websocket.send(JSON.stringify({ "terminate_session": true }));
-                    } catch (e) {
-                        logDebug(`Error sending terminate message: ${e.message}`, 'error');
-                    }
+                    } catch (e) {}
                 }
                 appState.websocket.close(1000, "User ended call");
                 appState.websocket = null;
@@ -692,7 +565,7 @@ appState.websocket = new WebSocket(wsUrl);
             }
             if (wasActive) {
                 updateStatus('Call ended.', 'info');
-                addMessageToTranscript('System', 'Call ended by user.', 'system');
+                addMessageToTranscript('System', 'Call ended.', 'system');
             }
             if (elements.startCallBtn) elements.startCallBtn.disabled = false;
             if (elements.endCallBtn) elements.endCallBtn.disabled = true;
@@ -726,42 +599,32 @@ appState.websocket = new WebSocket(wsUrl);
                     }
                 };
                 elements.aiAudioPlayer.onerror = (e) => {
-                    logDebug(`Audio playback error: ${e.message || JSON.stringify(e)}`, 'error');
                     appState.isAISpeaking = false;
                     if (elements.recordBtn && appState.isSessionActive) elements.recordBtn.disabled = false;
                     updateStatus('Error playing AI response.', 'error');
-                    showToast('Error playing AI response.', 'error');
+                    showToast('Could not play the AI response.', 'error');
                 };
             } catch (err) {
-                logDebug(`Audio setup error: ${err.message}`, 'error');
                 appState.isAISpeaking = false;
                 if (elements.recordBtn && appState.isSessionActive) elements.recordBtn.disabled = false;
                 updateStatus('Error playing AI response.', 'error');
-                showToast('Error playing AI response.', 'error');
+                showToast('Could not play the AI response.', 'error');
             }
         };
 
         const initializeTrainer = () => {
-            logDebug("Initializing AI Sales Pro 4.0 (Public Version)...", 'info');
             initializeTheme();
-            logDebug('Using hardcoded API Key and Voice ID.', 'info');
 
             const speechRecognitionInitialized = initializeSpeechRecognition();
             _replaceFeatherIcons();
 
             if (elements.aiAudioPlayer) appState.audioPlayer = elements.aiAudioPlayer;
-            else logDebug("CRITICAL: AI Audio Player element not found.", 'error');
 
             if (elements.themeToggleBtn) elements.themeToggleBtn.addEventListener('click', toggleTheme);
             if (elements.startCallBtn) elements.startCallBtn.addEventListener('click', startCall);
             if (elements.recordBtn && speechRecognitionInitialized) elements.recordBtn.addEventListener('click', toggleRecording);
             else if (elements.recordBtn) elements.recordBtn.disabled = true;
             if (elements.endCallBtn) elements.endCallBtn.addEventListener('click', () => endCall(true));
-
-            if (elements.toggleDebugBtn) elements.toggleDebugBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleDebugConsole();
-            });
 
             if (elements.howToToggleBtn && elements.howToContent) {
                 elements.howToToggleBtn.addEventListener('click', () => {
@@ -786,10 +649,6 @@ appState.websocket = new WebSocket(wsUrl);
             addMessageToTranscript('System', 'Welcome! Click "Start Call" to begin your AI training session.', 'system');
 
             showToast("AI Sales Pro 4.0 Ready!", "success", 2000);
-            logDebug("Initialization complete.", 'success');
-            if (appState.showDebug && elements.debugConsole) {
-                elements.debugConsole.style.display = 'block';
-            }
         };
 
         if (document.readyState === 'loading') {
