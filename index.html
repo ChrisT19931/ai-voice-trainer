@@ -231,7 +231,6 @@
         const THEME_KEY_LS = 'aiSalesPro4_theme_hardcoded_v4_public_final';
         const HARDCODED_VOICE_ID = 'nGANIuCPLd6iMHN29kJp';
         const ELEVENLABS_API_KEY = 'sk_3813e5cdafb1f36254ab1f4677b63e35aa26c5ec080d2253';
-        const ELEVENLABS_WEBSOCKET_URL = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${HARDCODED_VOICE_ID}`;
         const ELEVENLABS_MODEL_ID = 'eleven_turbo_v2';
         const CONNECTION_TIMEOUT = 15000;
 
@@ -534,8 +533,19 @@
                 throw error;
             }
         }
+        <script>
+async function getSignedUrl() {
+  const resp = await fetch(
+    `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${appState.elevenLabsVoiceId}`,
+    { headers: { 'xi-api-key': appState.elevenLabsApiKey } }
+  );
+  const { signed_url } = await resp.json();
+  return signed_url;
+}
+</script>
 
-        const startCall = async () => {
+const startCall = async () => {
+
             logDebug("startCall function invoked", 'info');
             if (!appState.elevenLabsApiKey) {
                 showToast('API key is missing.', 'error');
@@ -551,7 +561,12 @@
             addMessageToTranscript('System', 'Attempting to connect to AI agent...', 'system');
             try {
                 const wsUrl = await getSignedUrl();
-                appState.websocket = new WebSocket(wsUrl);
+                // First ask ElevenLabs for your temporary WebSocket URL...
+const wsUrl = await getSignedUrl();
+
+// …then open your socket with that URL
+appState.websocket = new WebSocket(wsUrl);
+
                 appState.audioQueue = [];
                 startConnectionTimer();
                 appState.websocket.onopen = () => {
