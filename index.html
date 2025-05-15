@@ -203,8 +203,8 @@
         'use strict';
 
         const THEME_KEY_LS = 'aiSalesPro4_theme_hardcoded_v4_public_final';
-        const HARDCODED_VOICE_ID = 'nGANIuCPLd6iMHN29kJp';
-        const ELEVENLABS_API_KEY = 'sk_3813e5cdafb1f36254ab1f4677b63e35aa26c5ec080d2253';
+        const HARDCODED_VOICE_ID = import.meta.env.VITE_ELEVENLABS_VOICE_ID;
+const ELEVENLABS_MODEL_ID = import.meta.env.VITE_ELEVENLABS_MODEL_ID;const ELEVENLABS_MODEL_ID = import.meta.env.VITE_ELEVENLABS_MODEL_ID;        const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
 
         let appState = {
             currentTheme: 'dark',
